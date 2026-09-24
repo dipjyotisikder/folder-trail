@@ -1,0 +1,66 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:FolderTrail.App.Features.Onboarding"
+             x:Class="FolderTrail.App.Features.Onboarding.OnboardingView"
+             x:DataType="vm:OnboardingViewModel">
+    <UserControl.Styles>
+        <Style Selector="TextBlock.bullet">
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="Foreground" Value="{DynamicResource FtTextSecondaryBrush}" />
+        </Style>
+    </UserControl.Styles>
+    <Border Background="{DynamicResource FtWindowBrush}">
+        <ScrollViewer>
+            <Border Classes="card" MaxWidth="760" Margin="32" Padding="36" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <StackPanel Spacing="24">
+                    <StackPanel Orientation="Horizontal" Spacing="16">
+                        <Image Source="/Assets/foldertrail-256.png" Width="56" Height="56" />
+                        <StackPanel VerticalAlignment="Center" Spacing="2">
+                            <TextBlock Text="Welcome to FolderTrail" Classes="h1" />
+                            <TextBlock Text="A private change journal for the folders you choose." Classes="secondary" />
+                        </StackPanel>
+                    </StackPanel>
+
+                    <Grid ColumnDefinitions="*,28,*">
+                        <StackPanel Spacing="10">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <PathIcon Data="{StaticResource IconCheck}" Foreground="{DynamicResource FtSuccessBrush}" Width="16" Height="16" />
+                                <TextBlock Text="What is recorded" Classes="h3" />
+                            </StackPanel>
+                            <TextBlock Classes="bullet" Text="• When files and folders are created, modified, deleted or renamed" />
+                            <TextBlock Classes="bullet" Text="• Their names, paths, sizes and times" />
+                            <TextBlock Classes="bullet" Text="• Whether a change was seen live or found later by a scan" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="2" Spacing="10">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <PathIcon Data="{StaticResource IconClose}" Foreground="{DynamicResource FtDangerBrush}" Width="14" Height="14" />
+                                <TextBlock Text="What is not recorded" Classes="h3" />
+                            </StackPanel>
+                            <TextBlock Classes="bullet" Text="• File contents. FolderTrail is a journal, not a backup, and can't restore files." />
+                            <TextBlock Classes="bullet" Text="• Anything outside the folders you choose" />
+                            <TextBlock Classes="bullet" Text="• Nothing leaves this computer: no network, accounts, analytics or ads" />
+                        </StackPanel>
+                    </Grid>
+
+                    <Border Classes="callout">
+                        <StackPanel Spacing="6">
+                            <TextBlock Text="How it works" Classes="h3" />
+                            <TextBlock Classes="wrap"
+                                       Text="Nothing is watched until you choose a folder. FolderTrail runs with your normal permissions and never asks for administrator rights. Windows reports most changes as they happen, and regular scans catch what was missed, such as changes made while FolderTrail was closed. Those are recorded as net differences, dated when the scan found them." />
+                        </StackPanel>
+                    </Border>
+
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <Button Classes="accent" Command="{Binding ChooseFolderCommand}" Padding="16,8">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <PathIcon Data="{StaticResource IconFolder}" />
+                                <TextBlock Text="Choose a folder to watch…" />
+                            </StackPanel>
+                        </Button>
+                        <Button Content="Not now" Command="{Binding SkipCommand}" Padding="16,8" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </ScrollViewer>
+    </Border>
+</UserControl>

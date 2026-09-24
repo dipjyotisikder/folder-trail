@@ -1,0 +1,76 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- Color tokens. Text colors meet WCAG AA contrast on their surfaces in both variants. -->
+    <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+
+            <SolidColorBrush x:Key="FtWindowBrush" Color="#F5F7F9" />
+            <SolidColorBrush x:Key="FtSidebarBrush" Color="#ECEFF3" />
+            <SolidColorBrush x:Key="FtSurfaceBrush" Color="#FFFFFF" />
+            <SolidColorBrush x:Key="FtSurfaceAltBrush" Color="#F8FAFB" />
+            <SolidColorBrush x:Key="FtHoverBrush" Color="#0F172A" Opacity="0.05" />
+            <SolidColorBrush x:Key="FtSelectedBrush" Color="#0E7490" Opacity="0.12" />
+            <SolidColorBrush x:Key="FtBorderBrush" Color="#D9DFE6" />
+            <SolidColorBrush x:Key="FtBorderStrongBrush" Color="#B8C1CC" />
+            <SolidColorBrush x:Key="FtTextBrush" Color="#111827" />
+            <SolidColorBrush x:Key="FtTextSecondaryBrush" Color="#4B5563" />
+            <SolidColorBrush x:Key="FtTextTertiaryBrush" Color="#5F6875" />
+            <SolidColorBrush x:Key="FtAccentBrush" Color="#0E7490" />
+            <SolidColorBrush x:Key="FtAccentSoftBrush" Color="#E0F2F6" />
+            <SolidColorBrush x:Key="FtOnAccentBrush" Color="#FFFFFF" />
+            <SolidColorBrush x:Key="FtFocusBrush" Color="#0E7490" />
+            <SolidColorBrush x:Key="FtOverlayBrush" Color="#000000" Opacity="0.38" />
+
+            <SolidColorBrush x:Key="FtSuccessBrush" Color="#15803D" />
+            <SolidColorBrush x:Key="FtSuccessSoftBrush" Color="#DCFCE7" />
+            <SolidColorBrush x:Key="FtWarningBrush" Color="#A15C07" />
+            <SolidColorBrush x:Key="FtWarningSoftBrush" Color="#FEF3C7" />
+            <SolidColorBrush x:Key="FtDangerBrush" Color="#B91C1C" />
+            <SolidColorBrush x:Key="FtDangerSoftBrush" Color="#FEE2E2" />
+            <SolidColorBrush x:Key="FtInfoBrush" Color="#1D4ED8" />
+            <SolidColorBrush x:Key="FtInfoSoftBrush" Color="#DBEAFE" />
+            <SolidColorBrush x:Key="FtRenameBrush" Color="#6D28D9" />
+            <SolidColorBrush x:Key="FtRenameSoftBrush" Color="#EDE9FE" />
+            <SolidColorBrush x:Key="FtNeutralBrush" Color="#4B5563" />
+            <SolidColorBrush x:Key="FtNeutralSoftBrush" Color="#E5E7EB" />
+        </ResourceDictionary>
+
+        <ResourceDictionary x:Key="Dark">
+
+            <SolidColorBrush x:Key="FtWindowBrush" Color="#101317" />
+            <SolidColorBrush x:Key="FtSidebarBrush" Color="#161A20" />
+            <SolidColorBrush x:Key="FtSurfaceBrush" Color="#1B2027" />
+            <SolidColorBrush x:Key="FtSurfaceAltBrush" Color="#20262E" />
+            <SolidColorBrush x:Key="FtHoverBrush" Color="#FFFFFF" Opacity="0.06" />
+            <SolidColorBrush x:Key="FtSelectedBrush" Color="#22B3CC" Opacity="0.18" />
+            <SolidColorBrush x:Key="FtBorderBrush" Color="#2E3641" />
+            <SolidColorBrush x:Key="FtBorderStrongBrush" Color="#46505D" />
+            <SolidColorBrush x:Key="FtTextBrush" Color="#F2F4F7" />
+            <SolidColorBrush x:Key="FtTextSecondaryBrush" Color="#C3CAD3" />
+            <SolidColorBrush x:Key="FtTextTertiaryBrush" Color="#9BA4B0" />
+            <SolidColorBrush x:Key="FtAccentBrush" Color="#3CC4DB" />
+            <SolidColorBrush x:Key="FtAccentSoftBrush" Color="#12353D" />
+            <SolidColorBrush x:Key="FtOnAccentBrush" Color="#06232A" />
+            <SolidColorBrush x:Key="FtFocusBrush" Color="#6ED6E8" />
+            <SolidColorBrush x:Key="FtOverlayBrush" Color="#000000" Opacity="0.55" />
+
+            <SolidColorBrush x:Key="FtSuccessBrush" Color="#4ADE80" />
+            <SolidColorBrush x:Key="FtSuccessSoftBrush" Color="#12301E" />
+            <SolidColorBrush x:Key="FtWarningBrush" Color="#FBBF24" />
+            <SolidColorBrush x:Key="FtWarningSoftBrush" Color="#382B10" />
+            <SolidColorBrush x:Key="FtDangerBrush" Color="#F87171" />
+            <SolidColorBrush x:Key="FtDangerSoftBrush" Color="#3B1719" />
+            <SolidColorBrush x:Key="FtInfoBrush" Color="#7DB4FC" />
+            <SolidColorBrush x:Key="FtInfoSoftBrush" Color="#16283F" />
+            <SolidColorBrush x:Key="FtRenameBrush" Color="#B79DFB" />
+            <SolidColorBrush x:Key="FtRenameSoftBrush" Color="#271F42" />
+            <SolidColorBrush x:Key="FtNeutralBrush" Color="#AEB6C1" />
+            <SolidColorBrush x:Key="FtNeutralSoftBrush" Color="#262C35" />
+        </ResourceDictionary>
+    </ResourceDictionary.ThemeDictionaries>
+
+    <FontFamily x:Key="FtFontFamily">Segoe UI Variable Text, Segoe UI, fonts:Inter#Inter</FontFamily>
+    <x:Double x:Key="FtBodySize">14</x:Double>
+    <CornerRadius x:Key="FtRadius">8</CornerRadius>
+    <CornerRadius x:Key="FtRadiusSmall">6</CornerRadius>
+</ResourceDictionary>

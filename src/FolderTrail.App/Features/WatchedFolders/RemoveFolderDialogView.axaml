@@ -1,0 +1,38 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:FolderTrail.App.Features.WatchedFolders"
+             x:Class="FolderTrail.App.Features.WatchedFolders.RemoveFolderDialogView"
+             x:DataType="vm:RemoveFolderDialogViewModel"
+             Width="500">
+    <StackPanel Spacing="14">
+        <SelectableTextBlock Text="{Binding Path}" Classes="secondary wrap" />
+        <TextBlock Text="{Binding HistoryText}" Classes="wrap" />
+
+        <RadioButton GroupName="removal" IsChecked="{Binding KeepHistory}">
+            <StackPanel Spacing="2">
+                <TextBlock Text="Stop watching and keep history" FontWeight="SemiBold" />
+                <TextBlock Classes="caption wrap"
+                           Text="Recorded activity stays searchable and can be exported. It's deleted when it passes the retention period." />
+            </StackPanel>
+        </RadioButton>
+        <RadioButton GroupName="removal" IsChecked="{Binding DeleteHistory}">
+            <StackPanel Spacing="2">
+                <TextBlock Text="Stop watching and delete this folder's history" FontWeight="SemiBold" />
+                <TextBlock Classes="caption wrap"
+                           Text="Permanently deletes this folder's activity records and monitoring gaps from FolderTrail. Your files aren't touched." />
+            </StackPanel>
+        </RadioButton>
+
+        <Border Classes="callout danger" IsVisible="{Binding DeleteHistory}">
+            <CheckBox IsChecked="{Binding DeletionConfirmed}">
+                <TextBlock Text="I understand this folder's history will be permanently deleted." Classes="wrap" />
+            </CheckBox>
+        </Border>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
+            <Button Content="Cancel" Command="{Binding CancelCommand}" />
+            <Button Content="{Binding ConfirmText}" Command="{Binding ConfirmCommand}"
+                    Classes.danger="{Binding DeleteHistory}" Classes.accent="{Binding KeepHistory}" />
+        </StackPanel>
+    </StackPanel>
+</UserControl>

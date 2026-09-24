@@ -1,0 +1,105 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:shell="using:FolderTrail.App.Shell"
+        xmlns:folders="using:FolderTrail.App.Features.WatchedFolders"
+        xmlns:timeline="using:FolderTrail.App.Features.Timeline"
+        xmlns:settings="using:FolderTrail.App.Features.Settings"
+        xmlns:diagnostics="using:FolderTrail.App.Features.Diagnostics"
+        xmlns:onboarding="using:FolderTrail.App.Features.Onboarding"
+        xmlns:dialogs="using:FolderTrail.App.Shared.Dialogs"
+        x:Class="FolderTrail.App.Shell.MainWindow"
+        x:DataType="shell:ShellViewModel"
+        Title="FolderTrail"
+        Icon="avares://FolderTrail/Assets/foldertrail.ico"
+        Width="1320" Height="840" MinWidth="980" MinHeight="620"
+        WindowStartupLocation="CenterScreen">
+
+    <Window.KeyBindings>
+        <KeyBinding Gesture="Ctrl+F" Command="{Binding FocusSearchCommand}" />
+        <KeyBinding Gesture="Ctrl+N" Command="{Binding AddFolderCommand}" />
+        <KeyBinding Gesture="F5" Command="{Binding ScanNowCommand}" />
+        <KeyBinding Gesture="Ctrl+E" Command="{Binding ExportCsvCommand}" />
+        <KeyBinding Gesture="Ctrl+OemComma" Command="{Binding ShowSettingsCommand}" />
+        <KeyBinding Gesture="Escape" Command="{Binding GoBackCommand}" />
+    </Window.KeyBindings>
+
+    <Window.DataTemplates>
+        <DataTemplate DataType="folders:AddFolderDialogViewModel">
+            <folders:AddFolderDialogView />
+        </DataTemplate>
+        <DataTemplate DataType="folders:RemoveFolderDialogViewModel">
+            <folders:RemoveFolderDialogView />
+        </DataTemplate>
+        <DataTemplate DataType="folders:ExclusionsDialogViewModel">
+            <folders:ExclusionsDialogView />
+        </DataTemplate>
+        <DataTemplate DataType="dialogs:ConfirmDialogViewModel">
+            <dialogs:ConfirmDialogView />
+        </DataTemplate>
+        <DataTemplate DataType="diagnostics:ExportDiagnosticsDialogViewModel">
+            <diagnostics:ExportDiagnosticsDialogView />
+        </DataTemplate>
+    </Window.DataTemplates>
+
+    <Panel>
+        <Grid ColumnDefinitions="272,*" IsEnabled="{Binding IsMainEnabled}">
+            <Border Background="{DynamicResource FtSidebarBrush}" BorderBrush="{DynamicResource FtBorderBrush}" BorderThickness="0,0,1,0">
+                <DockPanel>
+                    <StackPanel DockPanel.Dock="Bottom" Margin="12,0,12,14" Spacing="2">
+                        <Separator Margin="0,0,0,6" />
+                        <Button Classes="nav" Classes.selected="{Binding IsSettingsPage}" Command="{Binding ShowSettingsCommand}"
+                                ToolTip.Tip="Settings (Ctrl+,)" AutomationProperties.Name="Settings">
+                            <StackPanel Orientation="Horizontal" Spacing="10">
+                                <PathIcon Data="{StaticResource IconSettings}" />
+                                <TextBlock Text="Settings" />
+                            </StackPanel>
+                        </Button>
+                        <Button Classes="nav" Classes.selected="{Binding IsDiagnosticsPage}" Command="{Binding ShowDiagnosticsCommand}"
+                                AutomationProperties.Name="Diagnostics">
+                            <StackPanel Orientation="Horizontal" Spacing="10">
+                                <PathIcon Data="{StaticResource IconPulse}" />
+                                <TextBlock Text="Diagnostics" />
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                    <folders:WatchedFoldersView DataContext="{Binding Folders}" />
+                </DockPanel>
+            </Border>
+
+            <Panel Grid.Column="1">
+                <Grid ColumnDefinitions="*,360" IsVisible="{Binding IsActivityPage}">
+                    <DockPanel>
+                        <ContentControl DockPanel.Dock="Top" Content="{Binding Folders.SelectedFolder}">
+                            <ContentControl.DataTemplates>
+                                <DataTemplate DataType="folders:WatchedFolderItemViewModel">
+                                    <folders:FolderSummaryView />
+                                </DataTemplate>
+                            </ContentControl.DataTemplates>
+                        </ContentControl>
+                        <timeline:TimelineView x:Name="TimelinePane" DataContext="{Binding Timeline}" />
+                    </DockPanel>
+                    <Border Grid.Column="1" Background="{DynamicResource FtSurfaceBrush}"
+                            BorderBrush="{DynamicResource FtBorderBrush}" BorderThickness="1,0,0,0">
+                        <timeline:EventDetailsView DataContext="{Binding Timeline.Details}" />
+                    </Border>
+                </Grid>
+
+                <Panel IsVisible="{Binding IsSettingsPage}">
+                    <settings:SettingsView DataContext="{Binding SettingsPage}" />
+                </Panel>
+
+                <Panel IsVisible="{Binding IsDiagnosticsPage}">
+                    <diagnostics:DiagnosticsView DataContext="{Binding Diagnostics}" />
+                </Panel>
+            </Panel>
+        </Grid>
+
+        <Panel IsVisible="{Binding IsOnboardingVisible}">
+            <onboarding:OnboardingView DataContext="{Binding Onboarding}" />
+        </Panel>
+
+        <Panel IsVisible="{Binding Dialogs.IsOpen}">
+            <dialogs:DialogHostView DataContext="{Binding Dialogs}" />
+        </Panel>
+    </Panel>
+</Window>

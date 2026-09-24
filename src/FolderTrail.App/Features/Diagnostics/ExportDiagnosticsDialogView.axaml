@@ -1,0 +1,22 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:FolderTrail.App.Features.Diagnostics"
+             x:Class="FolderTrail.App.Features.Diagnostics.ExportDiagnosticsDialogView"
+             x:DataType="vm:ExportDiagnosticsDialogViewModel"
+             Width="480">
+    <StackPanel Spacing="14">
+        <TextBlock Classes="wrap"
+                   Text="Saves a text report with the app version, database details, the state of each watched folder and recent warnings and errors." />
+        <CheckBox IsChecked="{Binding IncludePaths}">
+            <StackPanel Spacing="2">
+                <TextBlock Text="Include file and folder paths" />
+                <TextBlock Classes="caption wrap"
+                           Text="Paths can reveal the names of your files and folders. Leave this off unless the person helping you needs them." />
+            </StackPanel>
+        </CheckBox>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
+            <Button Content="Cancel" Command="{Binding CancelCommand}" />
+            <Button Classes="accent" Content="Choose location…" Command="{Binding ConfirmCommand}" IsDefault="True" />
+        </StackPanel>
+    </StackPanel>
+</UserControl>

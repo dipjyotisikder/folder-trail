@@ -1,0 +1,136 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:FolderTrail.App.Features.Timeline"
+             x:Class="FolderTrail.App.Features.Timeline.EventDetailsView"
+             x:DataType="vm:EventDetailsViewModel">
+    <UserControl.Styles>
+        <Style Selector="StackPanel.field">
+            <Setter Property="Spacing" Value="2" />
+        </Style>
+        <Style Selector="StackPanel.field > SelectableTextBlock">
+            <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+    </UserControl.Styles>
+    <Panel>
+        <StackPanel IsVisible="{Binding !HasEntry}" VerticalAlignment="Center" HorizontalAlignment="Center"
+                    Margin="28" Spacing="8" MaxWidth="260">
+            <PathIcon Data="{StaticResource IconInfo}" Width="30" Height="30" Foreground="{DynamicResource FtTextTertiaryBrush}" />
+            <TextBlock Text="No event selected" Classes="h3" HorizontalAlignment="Center" />
+            <TextBlock Text="Select an event in the timeline to see its details." Classes="caption wrap" TextAlignment="Center" />
+        </StackPanel>
+
+        <ScrollViewer IsVisible="{Binding HasEntry}">
+            <StackPanel Margin="20,18" Spacing="14">
+                <Grid ColumnDefinitions="Auto,*">
+                    <Border Classes="badge" Classes.created="{Binding IsCreated}" Classes.modified="{Binding IsModified}"
+                            Classes.deleted="{Binding IsDeleted}" Classes.renamed="{Binding IsRenamed}" VerticalAlignment="Top">
+                        <Panel>
+                            <PathIcon Data="{StaticResource IconPlus}" IsVisible="{Binding IsCreated}" />
+                            <PathIcon Data="{StaticResource IconPencil}" IsVisible="{Binding IsModified}" />
+                            <PathIcon Data="{StaticResource IconDelete}" IsVisible="{Binding IsDeleted}" />
+                            <PathIcon Data="{StaticResource IconRename}" IsVisible="{Binding IsRenamed}" />
+                        </Panel>
+                    </Border>
+                    <StackPanel Grid.Column="1" Margin="12,0,0,0" Spacing="2">
+                        <TextBlock Text="{Binding Verb}" Classes="h2" />
+                        <SelectableTextBlock Text="{Binding Name}" TextWrapping="Wrap" />
+                    </StackPanel>
+                </Grid>
+
+                <Border Classes="callout neutral" IsVisible="{Binding HasAvailabilityNote}">
+                    <TextBlock Text="{Binding AvailabilityNote}" Classes="caption wrap" />
+                </Border>
+
+                <WrapPanel>
+                    <WrapPanel.Styles>
+                        <Style Selector="WrapPanel > Button">
+                            <Setter Property="Margin" Value="0,0,6,6" />
+                        </Style>
+                    </WrapPanel.Styles>
+                    <Button Command="{Binding OpenCommand}" ToolTip.Tip="Open with the default app">
+                        <StackPanel Orientation="Horizontal" Spacing="6">
+                            <PathIcon Data="{StaticResource IconOpen}" />
+                            <TextBlock Text="{Binding OpenText}" />
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding ShowInExplorerCommand}">
+                        <StackPanel Orientation="Horizontal" Spacing="6">
+                            <PathIcon Data="{StaticResource IconFolderOpen}" />
+                            <TextBlock Text="Show in File Explorer" />
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding CopyPathCommand}">
+                        <StackPanel Orientation="Horizontal" Spacing="6">
+                            <PathIcon Data="{StaticResource IconCopy}" />
+                            <TextBlock Text="Copy path" />
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding CopyDetailsCommand}">
+                        <StackPanel Orientation="Horizontal" Spacing="6">
+                            <PathIcon Data="{StaticResource IconCopy}" />
+                            <TextBlock Text="Copy details" />
+                        </StackPanel>
+                    </Button>
+                </WrapPanel>
+
+                <Separator Margin="0" />
+
+                <StackPanel Classes="field">
+                    <TextBlock Text="Full path" Classes="label" />
+                    <SelectableTextBlock Text="{Binding FullPath}" />
+                </StackPanel>
+                <StackPanel Classes="field" IsVisible="{Binding HasOldPath}">
+                    <TextBlock Text="Old path" Classes="label" />
+                    <SelectableTextBlock Text="{Binding OldPath}" />
+                </StackPanel>
+                <StackPanel Classes="field">
+                    <TextBlock Text="Watched folder" Classes="label" />
+                    <SelectableTextBlock Text="{Binding WatchedFolder}" />
+                </StackPanel>
+                <Grid ColumnDefinitions="*,*">
+                    <StackPanel Classes="field">
+                        <TextBlock Text="Event" Classes="label" />
+                        <TextBlock Text="{Binding Verb}" />
+                    </StackPanel>
+                    <StackPanel Classes="field" Grid.Column="1">
+                        <TextBlock Text="Item type" Classes="label" />
+                        <TextBlock Text="{Binding KindText}" />
+                    </StackPanel>
+                </Grid>
+                <StackPanel Classes="field">
+                    <TextBlock Text="Source" Classes="label" />
+                    <TextBlock Text="{Binding SourceText}" />
+                    <TextBlock Text="{Binding SourceExplanation}" Classes="caption wrap" />
+                </StackPanel>
+                <StackPanel Classes="field">
+                    <TextBlock Text="{Binding DetectedLabel}" Classes="label" />
+                    <SelectableTextBlock Text="{Binding DetectedLocal}" />
+                    <SelectableTextBlock Text="{Binding DetectedUtc}" Classes="caption" />
+                </StackPanel>
+                <StackPanel Classes="field">
+                    <TextBlock Text="Size" Classes="label" />
+                    <TextBlock Text="{Binding SizeText}" />
+                </StackPanel>
+                <StackPanel Classes="field" IsVisible="{Binding HasPreviousSize}">
+                    <TextBlock Text="Previous size" Classes="label" />
+                    <TextBlock Text="{Binding PreviousSizeText}" />
+                </StackPanel>
+                <StackPanel Classes="field" IsVisible="{Binding HasLastWrite}">
+                    <TextBlock Text="Last modified (file system)" Classes="label" />
+                    <TextBlock Text="{Binding LastWriteText}" />
+                </StackPanel>
+                <StackPanel Classes="field" IsVisible="{Binding HasPreviousLastWrite}">
+                    <TextBlock Text="Previous last-modified time" Classes="label" />
+                    <TextBlock Text="{Binding PreviousLastWriteText}" />
+                </StackPanel>
+                <StackPanel Classes="field" IsVisible="{Binding HasPreviousObserved}">
+                    <TextBlock Text="Previous state last confirmed" Classes="label" />
+                    <TextBlock Text="{Binding PreviousObservedText}" />
+                </StackPanel>
+                <Border Classes="callout neutral" IsVisible="{Binding HasMerged}">
+                    <TextBlock Text="{Binding MergedText}" Classes="caption wrap" />
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+    </Panel>
+</UserControl>

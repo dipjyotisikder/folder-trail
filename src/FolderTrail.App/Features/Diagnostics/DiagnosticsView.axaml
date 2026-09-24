@@ -1,0 +1,148 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:FolderTrail.App.Features.Diagnostics"
+             x:Class="FolderTrail.App.Features.Diagnostics.DiagnosticsView"
+             x:DataType="vm:DiagnosticsViewModel">
+    <UserControl.Styles>
+        <Style Selector="Grid.facts > TextBlock.label">
+            <Setter Property="Margin" Value="0,3,20,3" />
+        </Style>
+        <Style Selector="Grid.facts > SelectableTextBlock">
+            <Setter Property="Margin" Value="0,3" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+    </UserControl.Styles>
+    <ScrollViewer>
+        <StackPanel Margin="28,22,28,28" MaxWidth="1000" HorizontalAlignment="Left" Spacing="16">
+            <Grid ColumnDefinitions="*,Auto">
+                <StackPanel Spacing="2">
+                    <TextBlock Text="Diagnostics" Classes="h1" />
+                    <TextBlock Text="{Binding CapturedText}" Classes="caption" />
+                </StackPanel>
+                <WrapPanel Grid.Column="1" VerticalAlignment="Top">
+                    <WrapPanel.Styles>
+                        <Style Selector="WrapPanel > Button">
+                            <Setter Property="Margin" Value="6,0,0,6" />
+                        </Style>
+                    </WrapPanel.Styles>
+                    <Button Content="Refresh" Command="{Binding RefreshCommand}" />
+                    <Button Content="Scan all now" Command="{Binding ScanAllCommand}" />
+                    <Button Content="Retry problem folders" Command="{Binding RetryProblemsCommand}" />
+                    <Button Content="Copy summary" Command="{Binding CopyReportCommand}" ToolTip.Tip="Copies a report without paths" />
+                    <Button Classes="accent" Content="Export…" Command="{Binding ExportCommand}" />
+                </WrapPanel>
+            </Grid>
+
+            <Border Classes="callout">
+                <StackPanel Spacing="4">
+                    <TextBlock Text="Healthy watcher ≠ complete history" Classes="h3" />
+                    <TextBlock Text="{Binding CompletenessStatement}" Classes="wrap" />
+                </StackPanel>
+            </Border>
+
+            <Border Classes="card">
+                <StackPanel Spacing="10">
+                    <TextBlock Text="Application" Classes="h2" />
+                    <Grid Classes="facts" ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+                        <TextBlock Classes="label" Text="Version" />
+                        <SelectableTextBlock Grid.Column="1" Text="{Binding AppVersion}" />
+                        <TextBlock Grid.Row="1" Classes="label" Text="Runtime" />
+                        <SelectableTextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Runtime}" />
+                        <TextBlock Grid.Row="2" Classes="label" Text="Operating system" />
+                        <SelectableTextBlock Grid.Row="2" Grid.Column="1" Text="{Binding OperatingSystem}" />
+                        <TextBlock Grid.Row="3" Classes="label" Text="Data folder" />
+                        <SelectableTextBlock Grid.Row="3" Grid.Column="1" Text="{Binding DataDirectory}" />
+                        <TextBlock Grid.Row="4" Classes="label" Text="Database" />
+                        <SelectableTextBlock Grid.Row="4" Grid.Column="1" Text="{Binding DatabasePath}" />
+                        <TextBlock Grid.Row="5" Classes="label" Text="Database size" />
+                        <SelectableTextBlock Grid.Row="5" Grid.Column="1" Text="{Binding DatabaseSize}" />
+                        <TextBlock Grid.Row="6" Classes="label" Text="Schema version" />
+                        <SelectableTextBlock Grid.Row="6" Grid.Column="1" Text="{Binding SchemaVersion}" />
+                        <TextBlock Grid.Row="7" Classes="label" Text="Stored records" />
+                        <SelectableTextBlock Grid.Row="7" Grid.Column="1" Text="{Binding Records}" />
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <Border Classes="card">
+                <StackPanel Spacing="10">
+                    <TextBlock Text="Watched folders" Classes="h2" />
+                    <TextBlock IsVisible="{Binding !HasFolders}" Text="No folders are being watched." Classes="secondary" />
+                    <ItemsControl ItemsSource="{Binding Folders}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="vm:FolderDiagnosticsRow">
+                                <Border BorderBrush="{DynamicResource FtBorderBrush}" BorderThickness="0,1,0,0" Padding="0,10">
+                                    <Grid ColumnDefinitions="*,*,*" RowDefinitions="Auto,Auto,Auto">
+                                        <StackPanel Grid.ColumnSpan="3" Spacing="1" Margin="0,0,0,6">
+                                            <TextBlock Text="{Binding Name}" Classes="h3" />
+                                            <SelectableTextBlock Text="{Binding Path}" Classes="caption" TextWrapping="Wrap" />
+                                        </StackPanel>
+                                        <StackPanel Grid.Row="1" Spacing="1">
+                                            <TextBlock Text="State" Classes="label" />
+                                            <TextBlock Text="{Binding State}" />
+                                        </StackPanel>
+                                        <StackPanel Grid.Row="1" Grid.Column="1" Spacing="1">
+                                            <TextBlock Text="Live watcher" Classes="label" />
+                                            <TextBlock Text="{Binding Watcher}" />
+                                        </StackPanel>
+                                        <StackPanel Grid.Row="1" Grid.Column="2" Spacing="1">
+                                            <TextBlock Text="History completeness" Classes="label" />
+                                            <TextBlock Text="{Binding History}" Classes="wrap" />
+                                        </StackPanel>
+                                        <StackPanel Grid.Row="2" Spacing="1" Margin="0,8,0,0">
+                                            <TextBlock Text="Last successful scan" Classes="label" />
+                                            <TextBlock Text="{Binding LastScan}" />
+                                        </StackPanel>
+                                        <StackPanel Grid.Row="2" Grid.Column="1" Spacing="1" Margin="0,8,0,0">
+                                            <TextBlock Text="Last observed event" Classes="label" />
+                                            <TextBlock Text="{Binding LastEvent}" />
+                                        </StackPanel>
+                                        <StackPanel Grid.Row="2" Grid.Column="2" Spacing="1" Margin="0,8,0,0">
+                                            <TextBlock Text="Skipped items · open gaps" Classes="label" />
+                                            <TextBlock>
+                                                <Run Text="{Binding Skipped}" />
+                                                <Run Text=" · " />
+                                                <Run Text="{Binding Gaps}" />
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+
+            <Border Classes="card">
+                <StackPanel Spacing="10">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <TextBlock Text="Recent warnings and errors" Classes="h2" VerticalAlignment="Center" />
+                        <CheckBox Grid.Column="1" IsChecked="{Binding ShowPaths}" Content="Show file and folder paths" />
+                    </Grid>
+                    <TextBlock Classes="caption wrap"
+                               Text="Paths are hidden by default. The log file on disk never contains them; an export includes them only if you choose to." />
+                    <TextBlock IsVisible="{Binding !HasEntries}" Text="No warnings or errors have been recorded." Classes="secondary" />
+                    <ItemsControl ItemsSource="{Binding Entries}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="vm:DiagnosticEntryRow">
+                                <Grid ColumnDefinitions="Auto,*" Margin="0,4">
+                                    <Border Classes="chip warning" Classes.danger="{Binding IsError}" Margin="0,0,10,0" VerticalAlignment="Top" MinWidth="70">
+                                        <TextBlock Text="{Binding Severity}" HorizontalAlignment="Center" />
+                                    </Border>
+                                    <StackPanel Grid.Column="1" Spacing="1">
+                                        <SelectableTextBlock Text="{Binding Message}" TextWrapping="Wrap" />
+                                        <TextBlock Classes="caption">
+                                            <Run Text="{Binding Time}" />
+                                            <Run Text=" · " />
+                                            <Run Text="{Binding Area}" />
+                                        </TextBlock>
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

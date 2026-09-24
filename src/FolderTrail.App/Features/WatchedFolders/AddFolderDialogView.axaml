@@ -1,0 +1,42 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:sys="using:System"
+             xmlns:vm="using:FolderTrail.App.Features.WatchedFolders"
+             x:Class="FolderTrail.App.Features.WatchedFolders.AddFolderDialogView"
+             x:DataType="vm:AddFolderDialogViewModel"
+             Width="500">
+    <StackPanel Spacing="14">
+        <StackPanel Spacing="2">
+            <TextBlock Text="{Binding FolderName}" Classes="h3" TextWrapping="Wrap" />
+            <SelectableTextBlock Text="{Binding Path}" Classes="secondary wrap" />
+        </StackPanel>
+
+        <CheckBox IsChecked="{Binding IncludeSubfolders}">
+            <StackPanel>
+                <TextBlock Text="Include subfolders" />
+                <TextBlock Classes="caption wrap" Text="Symbolic links and junctions inside the folder are recorded but not followed." />
+            </StackPanel>
+        </CheckBox>
+
+        <TextBlock Classes="secondary wrap"
+                   Text="FolderTrail first indexes what the folder contains now. This baseline doesn't add activity records. From then on it records items that are created, modified, deleted or renamed. It stores names, paths, sizes and times, never file contents, so it can't restore files." />
+
+        <Border Classes="callout" Classes.warning="{Binding RequiresMerge}" Classes.danger="{Binding HasProblem}">
+            <StackPanel Spacing="6">
+                <TextBlock Text="{Binding CheckMessage}" Classes="wrap" />
+                <ItemsControl ItemsSource="{Binding RelatedPaths}" IsVisible="{Binding HasRelatedPaths}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="sys:String">
+                            <TextBlock Text="{Binding}" Classes="caption" TextTrimming="CharacterEllipsis" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </Border>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
+            <Button Content="Cancel" Command="{Binding CancelCommand}" />
+            <Button Classes="accent" Content="{Binding ConfirmText}" Command="{Binding ConfirmCommand}" IsDefault="True" />
+        </StackPanel>
+    </StackPanel>
+</UserControl>

@@ -1,0 +1,293 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Style Selector="Window">
+        <Setter Property="FontFamily" Value="{StaticResource FtFontFamily}" />
+        <Setter Property="FontSize" Value="{StaticResource FtBodySize}" />
+        <Setter Property="Background" Value="{DynamicResource FtWindowBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource FtTextBrush}" />
+    </Style>
+
+    <!-- A strong, consistent keyboard focus ring. It only appears for keyboard focus, not mouse clicks. -->
+    <Style Selector=":is(Control)">
+        <Setter Property="FocusAdorner">
+            <FocusAdornerTemplate>
+                <Border BorderBrush="{DynamicResource FtFocusBrush}" BorderThickness="2" CornerRadius="6" Margin="-3" />
+            </FocusAdornerTemplate>
+        </Setter>
+    </Style>
+
+    <!-- Typography -->
+    <Style Selector="TextBlock.h1">
+        <Setter Property="FontSize" Value="22" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+    </Style>
+    <Style Selector="TextBlock.h2">
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+    </Style>
+    <Style Selector="TextBlock.h3">
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+    </Style>
+    <Style Selector="TextBlock.secondary, SelectableTextBlock.secondary">
+        <Setter Property="Foreground" Value="{DynamicResource FtTextSecondaryBrush}" />
+    </Style>
+    <Style Selector="TextBlock.caption, SelectableTextBlock.caption">
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="Foreground" Value="{DynamicResource FtTextTertiaryBrush}" />
+    </Style>
+    <Style Selector="TextBlock.label">
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Foreground" Value="{DynamicResource FtTextSecondaryBrush}" />
+    </Style>
+    <Style Selector="TextBlock.wrap, SelectableTextBlock.wrap">
+        <Setter Property="TextWrapping" Value="Wrap" />
+    </Style>
+
+    <!-- Surfaces -->
+    <Style Selector="Border.card">
+        <Setter Property="Background" Value="{DynamicResource FtSurfaceBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource FtBorderBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="{StaticResource FtRadius}" />
+        <Setter Property="Padding" Value="16" />
+    </Style>
+    <Style Selector="Border.callout">
+        <Setter Property="CornerRadius" Value="{StaticResource FtRadiusSmall}" />
+        <Setter Property="Padding" Value="12,10" />
+        <Setter Property="Background" Value="{DynamicResource FtInfoSoftBrush}" />
+    </Style>
+    <Style Selector="Border.callout.warning">
+        <Setter Property="Background" Value="{DynamicResource FtWarningSoftBrush}" />
+    </Style>
+    <Style Selector="Border.callout.danger">
+        <Setter Property="Background" Value="{DynamicResource FtDangerSoftBrush}" />
+    </Style>
+    <Style Selector="Border.callout.neutral">
+        <Setter Property="Background" Value="{DynamicResource FtNeutralSoftBrush}" />
+    </Style>
+    <Style Selector="Separator">
+        <Setter Property="Background" Value="{DynamicResource FtBorderBrush}" />
+        <Setter Property="Height" Value="1" />
+        <Setter Property="Margin" Value="0,8" />
+    </Style>
+
+    <!-- Status and event chips: soft background with strong foreground. -->
+    <Style Selector="Border.chip">
+        <Setter Property="CornerRadius" Value="10" />
+        <Setter Property="Padding" Value="8,2" />
+        <Setter Property="Background" Value="{DynamicResource FtNeutralSoftBrush}" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+    <Style Selector="Border.chip TextBlock">
+        <Setter Property="FontSize" Value="11.5" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Foreground" Value="{DynamicResource FtNeutralBrush}" />
+    </Style>
+    <Style Selector="Border.chip.success">
+        <Setter Property="Background" Value="{DynamicResource FtSuccessSoftBrush}" />
+    </Style>
+    <Style Selector="Border.chip.success TextBlock">
+        <Setter Property="Foreground" Value="{DynamicResource FtSuccessBrush}" />
+    </Style>
+    <Style Selector="Border.chip.warning">
+        <Setter Property="Background" Value="{DynamicResource FtWarningSoftBrush}" />
+    </Style>
+    <Style Selector="Border.chip.warning TextBlock">
+        <Setter Property="Foreground" Value="{DynamicResource FtWarningBrush}" />
+    </Style>
+    <Style Selector="Border.chip.danger">
+        <Setter Property="Background" Value="{DynamicResource FtDangerSoftBrush}" />
+    </Style>
+    <Style Selector="Border.chip.danger TextBlock">
+        <Setter Property="Foreground" Value="{DynamicResource FtDangerBrush}" />
+    </Style>
+    <Style Selector="Border.chip.info">
+        <Setter Property="Background" Value="{DynamicResource FtInfoSoftBrush}" />
+    </Style>
+    <Style Selector="Border.chip.info TextBlock">
+        <Setter Property="Foreground" Value="{DynamicResource FtInfoBrush}" />
+    </Style>
+
+    <!-- Round event-type badge with an icon. -->
+    <Style Selector="Border.badge">
+        <Setter Property="Width" Value="32" />
+        <Setter Property="Height" Value="32" />
+        <Setter Property="CornerRadius" Value="16" />
+        <Setter Property="Background" Value="{DynamicResource FtNeutralSoftBrush}" />
+    </Style>
+    <Style Selector="Border.badge PathIcon">
+        <Setter Property="Width" Value="16" />
+        <Setter Property="Height" Value="16" />
+        <Setter Property="Foreground" Value="{DynamicResource FtNeutralBrush}" />
+    </Style>
+    <Style Selector="Border.badge.created">
+        <Setter Property="Background" Value="{DynamicResource FtSuccessSoftBrush}" />
+    </Style>
+    <Style Selector="Border.badge.created PathIcon">
+        <Setter Property="Foreground" Value="{DynamicResource FtSuccessBrush}" />
+    </Style>
+    <Style Selector="Border.badge.modified">
+        <Setter Property="Background" Value="{DynamicResource FtInfoSoftBrush}" />
+    </Style>
+    <Style Selector="Border.badge.modified PathIcon">
+        <Setter Property="Foreground" Value="{DynamicResource FtInfoBrush}" />
+    </Style>
+    <Style Selector="Border.badge.deleted">
+        <Setter Property="Background" Value="{DynamicResource FtDangerSoftBrush}" />
+    </Style>
+    <Style Selector="Border.badge.deleted PathIcon">
+        <Setter Property="Foreground" Value="{DynamicResource FtDangerBrush}" />
+    </Style>
+    <Style Selector="Border.badge.renamed">
+        <Setter Property="Background" Value="{DynamicResource FtRenameSoftBrush}" />
+    </Style>
+    <Style Selector="Border.badge.renamed PathIcon">
+        <Setter Property="Foreground" Value="{DynamicResource FtRenameBrush}" />
+    </Style>
+
+    <!-- Status dot used in the sidebar. -->
+    <Style Selector="Ellipse.status">
+        <Setter Property="Width" Value="8" />
+        <Setter Property="Height" Value="8" />
+        <Setter Property="Fill" Value="{DynamicResource FtNeutralBrush}" />
+    </Style>
+    <Style Selector="Ellipse.status.success">
+        <Setter Property="Fill" Value="{DynamicResource FtSuccessBrush}" />
+    </Style>
+    <Style Selector="Ellipse.status.info">
+        <Setter Property="Fill" Value="{DynamicResource FtInfoBrush}" />
+    </Style>
+    <Style Selector="Ellipse.status.warning">
+        <Setter Property="Fill" Value="{DynamicResource FtWarningBrush}" />
+    </Style>
+    <Style Selector="Ellipse.status.danger">
+        <Setter Property="Fill" Value="{DynamicResource FtDangerBrush}" />
+    </Style>
+
+    <!-- Buttons -->
+    <Style Selector="Button">
+        <Setter Property="CornerRadius" Value="{StaticResource FtRadiusSmall}" />
+    </Style>
+    <Style Selector="Button.subtle">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+    </Style>
+    <Style Selector="Button.subtle:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource FtHoverBrush}" />
+    </Style>
+    <Style Selector="Button.icon">
+        <Setter Property="Padding" Value="7" />
+        <Setter Property="MinWidth" Value="32" />
+        <Setter Property="MinHeight" Value="32" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+    </Style>
+    <Style Selector="Button PathIcon">
+        <Setter Property="Width" Value="16" />
+        <Setter Property="Height" Value="16" />
+    </Style>
+    <Style Selector="Button.danger">
+        <Setter Property="Background" Value="{DynamicResource FtDangerBrush}" />
+        <Setter Property="Foreground" Value="#FFFFFF" />
+    </Style>
+    <Style Selector="Button.danger:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource FtDangerBrush}" />
+        <Setter Property="Foreground" Value="#FFFFFF" />
+        <Setter Property="Opacity" Value="0.9" />
+    </Style>
+    <Style Selector="Button.danger:disabled /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Opacity" Value="0.5" />
+    </Style>
+    <Style Selector="Button.link">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Foreground" Value="{DynamicResource FtAccentBrush}" />
+        <Setter Property="Cursor" Value="Hand" />
+    </Style>
+    <Style Selector="Button.link:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource FtAccentBrush}" />
+        <Setter Property="TextBlock.TextDecorations" Value="Underline" />
+    </Style>
+
+    <!-- Navigation items in the sidebar. -->
+    <Style Selector="Button.nav">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="Padding" Value="10,8" />
+    </Style>
+    <Style Selector="Button.nav:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource FtHoverBrush}" />
+    </Style>
+    <Style Selector="Button.nav.selected /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource FtSelectedBrush}" />
+    </Style>
+
+    <!-- Folder list in the sidebar -->
+    <Style Selector="ListBox.folders">
+        <Setter Property="Background" Value="Transparent" />
+    </Style>
+    <Style Selector="ListBox.folders ListBoxItem">
+        <Setter Property="Padding" Value="10,8" />
+        <Setter Property="Margin" Value="0,1" />
+        <Setter Property="CornerRadius" Value="{StaticResource FtRadiusSmall}" />
+    </Style>
+    <Style Selector="ListBox.folders ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource FtSelectedBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource FtTextBrush}" />
+    </Style>
+    <Style Selector="ListBox.folders ListBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource FtHoverBrush}" />
+    </Style>
+
+    <!-- Timeline list -->
+    <Style Selector="ListBox.timeline">
+        <Setter Property="Background" Value="Transparent" />
+    </Style>
+    <Style Selector="ListBox.timeline ListBoxItem">
+        <Setter Property="Padding" Value="12,8" />
+        <Setter Property="CornerRadius" Value="{StaticResource FtRadiusSmall}" />
+    </Style>
+    <Style Selector="ListBox.timeline ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource FtSelectedBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource FtTextBrush}" />
+    </Style>
+    <Style Selector="ListBox.timeline ListBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource FtHoverBrush}" />
+    </Style>
+
+    <!-- Toggle chips used as event-type filters. -->
+    <Style Selector="ToggleButton.filter">
+        <Setter Property="CornerRadius" Value="14" />
+        <Setter Property="Padding" Value="12,4" />
+        <Setter Property="Background" Value="{DynamicResource FtSurfaceBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource FtBorderStrongBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+    </Style>
+    <Style Selector="ToggleButton.filter:checked /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource FtAccentSoftBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource FtAccentBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource FtTextBrush}" />
+    </Style>
+    <Style Selector="ToggleButton.filter:checked:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource FtAccentSoftBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource FtTextBrush}" />
+    </Style>
+
+    <!-- Dialog overlay -->
+    <Style Selector="Border.dialog">
+        <Setter Property="Background" Value="{DynamicResource FtSurfaceBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource FtBorderStrongBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="10" />
+        <Setter Property="Padding" Value="24" />
+        <Setter Property="MaxWidth" Value="680" />
+        <Setter Property="BoxShadow" Value="0 12 32 0 #40000000" />
+    </Style>
+</Styles>

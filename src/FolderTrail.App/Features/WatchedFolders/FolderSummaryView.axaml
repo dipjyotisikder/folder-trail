@@ -1,0 +1,127 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:FolderTrail.App.Features.WatchedFolders"
+             x:Class="FolderTrail.App.Features.WatchedFolders.FolderSummaryView"
+             x:DataType="vm:WatchedFolderItemViewModel">
+    <Border Classes="card" Margin="20,16,12,4">
+        <StackPanel Spacing="12">
+            <Grid ColumnDefinitions="*,Auto">
+                <StackPanel Spacing="3">
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <TextBlock Text="{Binding Name}" Classes="h1" TextTrimming="CharacterEllipsis" MaxWidth="420" />
+                        <Border Classes="chip" Classes.success="{Binding IsToneSuccess}" Classes.info="{Binding IsToneInfo}"
+                                Classes.warning="{Binding IsToneWarning}" Classes.danger="{Binding IsToneDanger}">
+                            <TextBlock Text="{Binding StateText}" />
+                        </Border>
+                    </StackPanel>
+                    <SelectableTextBlock Text="{Binding DisplayPath}" Classes="secondary" TextWrapping="Wrap" />
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="6" VerticalAlignment="Top">
+                    <Button Command="{Binding ScanNowCommand}" IsVisible="{Binding CanScan}" ToolTip.Tip="Compare the folder with what FolderTrail last recorded (F5)">
+                        <StackPanel Orientation="Horizontal" Spacing="6">
+                            <PathIcon Data="{StaticResource IconRefresh}" />
+                            <TextBlock Text="Scan now" />
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding RetryCommand}" IsVisible="{Binding NeedsRetry}" Classes="accent">
+                        <StackPanel Orientation="Horizontal" Spacing="6">
+                            <PathIcon Data="{StaticResource IconRefresh}" />
+                            <TextBlock Text="Retry" />
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding PauseCommand}" IsVisible="{Binding CanPause}" ToolTip.Tip="Stop recording until you resume">
+                        <StackPanel Orientation="Horizontal" Spacing="6">
+                            <PathIcon Data="{StaticResource IconPause}" />
+                            <TextBlock Text="Pause" />
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding ResumeCommand}" IsVisible="{Binding CanResume}" Classes="accent">
+                        <StackPanel Orientation="Horizontal" Spacing="6">
+                            <PathIcon Data="{StaticResource IconPlay}" />
+                            <TextBlock Text="Resume" />
+                        </StackPanel>
+                    </Button>
+                    <Button Classes="icon" ToolTip.Tip="More folder actions" AutomationProperties.Name="More folder actions">
+                        <PathIcon Data="{StaticResource IconMore}" />
+                        <Button.Flyout>
+                            <MenuFlyout Placement="BottomEdgeAlignedRight">
+                                <MenuItem Header="Edit exclusions…" Command="{Binding EditExclusionsCommand}" />
+                                <MenuItem Header="Open in File Explorer" Command="{Binding OpenInExplorerCommand}" />
+                                <Separator />
+                                <MenuItem Header="Remove folder…" Command="{Binding RemoveCommand}" />
+                            </MenuFlyout>
+                        </Button.Flyout>
+                    </Button>
+                </StackPanel>
+            </Grid>
+
+            <Border Classes="callout" Classes.warning="{Binding IsToneWarning}" Classes.danger="{Binding IsToneDanger}"
+                    IsVisible="{Binding HasMessage}">
+                <TextBlock Text="{Binding Message}" Classes="wrap" />
+            </Border>
+
+            <WrapPanel>
+                <WrapPanel.Styles>
+                    <Style Selector="WrapPanel > StackPanel">
+                        <Setter Property="Margin" Value="0,0,32,4" />
+                        <Setter Property="Spacing" Value="2" />
+                    </Style>
+                </WrapPanel.Styles>
+                <StackPanel>
+                    <TextBlock Text="Last successful scan" Classes="caption" />
+                    <TextBlock Text="{Binding LastScanText}" />
+                </StackPanel>
+                <StackPanel>
+                    <TextBlock Text="Last observed event" Classes="caption" />
+                    <TextBlock Text="{Binding LastEventText}" />
+                </StackPanel>
+                <StackPanel>
+                    <TextBlock Text="Baseline" Classes="caption" />
+                    <TextBlock Text="{Binding BaselineText}" />
+                </StackPanel>
+                <StackPanel>
+                    <TextBlock Text="Skipped in last scan" Classes="caption" />
+                    <TextBlock Text="{Binding SkippedText}" />
+                </StackPanel>
+                <StackPanel>
+                    <TextBlock Text="Monitoring gaps" Classes="caption" />
+                    <TextBlock Text="{Binding GapsText}" />
+                </StackPanel>
+                <StackPanel>
+                    <TextBlock Text="Live watcher" Classes="caption" />
+                    <TextBlock Text="{Binding WatcherText}" />
+                </StackPanel>
+                <StackPanel>
+                    <TextBlock Text="Scope" Classes="caption" />
+                    <TextBlock Text="{Binding ScopeText}" />
+                </StackPanel>
+            </WrapPanel>
+
+            <Expander IsVisible="{Binding HasRecentGaps}" HorizontalAlignment="Stretch">
+                <Expander.Header>
+                    <TextBlock Text="Recent monitoring gaps" />
+                </Expander.Header>
+                <StackPanel Spacing="8">
+                    <TextBlock Classes="caption wrap"
+                               Text="During a gap FolderTrail wasn't observing live changes. The scan that follows records net differences, dated when it found them; it can't reconstruct every intermediate action or its exact time." />
+                    <ItemsControl ItemsSource="{Binding RecentGaps}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="vm:GapItemViewModel">
+                                <Grid ColumnDefinitions="Auto,*" Margin="0,3">
+                                    <Border Classes="chip" Classes.warning="{Binding IsOpen}" Margin="0,0,10,0" MinWidth="64">
+                                        <TextBlock Text="{Binding StatusText}" HorizontalAlignment="Center" />
+                                    </Border>
+                                    <StackPanel Grid.Column="1">
+                                        <TextBlock Text="{Binding Reason}" />
+                                        <TextBlock Text="{Binding Period}" Classes="caption" />
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Expander>
+        </StackPanel>
+    </Border>
+</UserControl>

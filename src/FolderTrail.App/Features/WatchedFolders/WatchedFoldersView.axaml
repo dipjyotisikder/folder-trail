@@ -1,0 +1,75 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:FolderTrail.App.Features.WatchedFolders"
+             x:Class="FolderTrail.App.Features.WatchedFolders.WatchedFoldersView"
+             x:DataType="vm:WatchedFoldersViewModel">
+    <DockPanel Margin="12,16,12,8">
+        <StackPanel DockPanel.Dock="Top" Spacing="14">
+            <StackPanel Orientation="Horizontal" Spacing="10" Margin="4,0">
+                <Image Source="/Assets/foldertrail-256.png" Width="28" Height="28" />
+                <TextBlock Text="FolderTrail" Classes="h2" VerticalAlignment="Center" />
+            </StackPanel>
+
+            <Button Classes="accent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                    Command="{Binding AddFolderCommand}" ToolTip.Tip="Choose a folder to watch (Ctrl+N)"
+                    AutomationProperties.Name="Add folder">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <PathIcon Data="{StaticResource IconPlus}" />
+                    <TextBlock Text="Add folder" />
+                </StackPanel>
+            </Button>
+
+            <Button Classes="nav" Classes.selected="{Binding IsAllActivitySelected}" Command="{Binding ShowAllActivityCommand}"
+                    AutomationProperties.Name="All activity">
+                <StackPanel Orientation="Horizontal" Spacing="10">
+                    <PathIcon Data="{StaticResource IconHistory}" />
+                    <TextBlock Text="All activity" />
+                </StackPanel>
+            </Button>
+
+            <TextBlock Text="WATCHED FOLDERS" Classes="label" Margin="8,2,0,0" />
+        </StackPanel>
+
+        <Panel>
+            <ListBox Classes="folders" ItemsSource="{Binding Folders}" SelectedItem="{Binding SelectedFolder}"
+                     IsVisible="{Binding HasFolders}" AutomationProperties.Name="Watched folders">
+                <ListBox.Styles>
+                    <Style Selector="ListBoxItem" x:DataType="vm:WatchedFolderItemViewModel">
+                        <Setter Property="AutomationProperties.Name" Value="{Binding AutomationName}" />
+                    </Style>
+                </ListBox.Styles>
+                <ListBox.ItemTemplate>
+                    <DataTemplate x:DataType="vm:WatchedFolderItemViewModel">
+                        <Grid ColumnDefinitions="Auto,*" Background="Transparent" ToolTip.Tip="{Binding DisplayPath}">
+                            <Grid.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="Scan now" Command="{Binding ScanNowCommand}" IsEnabled="{Binding CanScan}" />
+                                    <MenuItem Header="Pause monitoring" Command="{Binding PauseCommand}" IsVisible="{Binding CanPause}" />
+                                    <MenuItem Header="Resume monitoring" Command="{Binding ResumeCommand}" IsVisible="{Binding CanResume}" />
+                                    <MenuItem Header="Retry" Command="{Binding RetryCommand}" IsVisible="{Binding NeedsRetry}" />
+                                    <MenuItem Header="Edit exclusions…" Command="{Binding EditExclusionsCommand}" />
+                                    <MenuItem Header="Open in File Explorer" Command="{Binding OpenInExplorerCommand}" />
+                                    <Separator />
+                                    <MenuItem Header="Remove folder…" Command="{Binding RemoveCommand}" />
+                                </ContextMenu>
+                            </Grid.ContextMenu>
+                            <Ellipse Classes="status" Classes.success="{Binding IsToneSuccess}" Classes.info="{Binding IsToneInfo}"
+                                     Classes.warning="{Binding IsToneWarning}" Classes.danger="{Binding IsToneDanger}"
+                                     VerticalAlignment="Top" Margin="2,7,10,0" />
+                            <StackPanel Grid.Column="1" Spacing="1">
+                                <TextBlock Text="{Binding Name}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" />
+                                <TextBlock Text="{Binding SidebarStatusText}" Classes="caption" TextTrimming="CharacterEllipsis" />
+                            </StackPanel>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+            <StackPanel IsVisible="{Binding !HasFolders}" Margin="8,4" Spacing="6">
+                <TextBlock Text="No folders yet" Classes="h3" />
+                <TextBlock Classes="caption wrap"
+                           Text="FolderTrail doesn't watch anything until you choose a folder with Add folder." />
+            </StackPanel>
+        </Panel>
+    </DockPanel>
+</UserControl>

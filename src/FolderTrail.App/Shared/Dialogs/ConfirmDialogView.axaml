@@ -1,0 +1,18 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:dialogs="using:FolderTrail.App.Shared.Dialogs"
+             x:Class="FolderTrail.App.Shared.Dialogs.ConfirmDialogView"
+             x:DataType="dialogs:ConfirmDialogViewModel"
+             MaxWidth="500">
+    <StackPanel Spacing="16">
+        <TextBlock Text="{Binding Message}" Classes="wrap" />
+        <CheckBox IsVisible="{Binding RequiresAcknowledgement}" IsChecked="{Binding IsAcknowledged}">
+            <TextBlock Text="{Binding Acknowledgement}" Classes="wrap" />
+        </CheckBox>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
+            <Button Content="Cancel" Command="{Binding CancelCommand}" />
+            <Button Content="{Binding ConfirmText}" Command="{Binding ConfirmCommand}"
+                    Classes.danger="{Binding IsDestructive}" Classes.accent="{Binding !IsDestructive}" />
+        </StackPanel>
+    </StackPanel>
+</UserControl>

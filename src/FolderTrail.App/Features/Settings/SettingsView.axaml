@@ -1,0 +1,147 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:FolderTrail.App.Features.Settings"
+             x:Class="FolderTrail.App.Features.Settings.SettingsView"
+             x:DataType="vm:SettingsViewModel">
+    <UserControl.Styles>
+        <Style Selector="Grid.setting > StackPanel">
+            <Setter Property="Spacing" Value="2" />
+            <Setter Property="Margin" Value="0,0,24,0" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+        <Style Selector="Grid.setting > ComboBox">
+            <Setter Property="Width" Value="230" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+    </UserControl.Styles>
+    <ScrollViewer>
+        <StackPanel Margin="28,22,28,28" MaxWidth="780" HorizontalAlignment="Left" Spacing="16">
+            <TextBlock Text="Settings" Classes="h1" />
+
+            <Border Classes="card">
+                <StackPanel Spacing="14">
+                    <TextBlock Text="Appearance" Classes="h2" />
+                    <Grid Classes="setting" ColumnDefinitions="*,Auto">
+                        <StackPanel>
+                            <TextBlock Text="Theme" />
+                            <TextBlock Text="Light, dark, or the same as Windows." Classes="caption wrap" />
+                        </StackPanel>
+                        <ComboBox Grid.Column="1" ItemsSource="{Binding ThemeOptions}" SelectedItem="{Binding SelectedTheme}"
+                                  AutomationProperties.Name="Theme" />
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <Border Classes="card">
+                <StackPanel Spacing="14">
+                    <TextBlock Text="History" Classes="h2" />
+                    <Grid Classes="setting" ColumnDefinitions="*,Auto">
+                        <StackPanel>
+                            <TextBlock Text="Keep activity for" />
+                            <TextBlock Classes="caption wrap"
+                                       Text="Older activity records are deleted automatically. The inventory of watched folders (what each folder contained at the last scan) is kept for as long as a folder is watched, because scans need it to detect changes." />
+                        </StackPanel>
+                        <ComboBox Grid.Column="1" ItemsSource="{Binding RetentionOptions}" SelectedItem="{Binding SelectedRetention}"
+                                  AutomationProperties.Name="Keep activity for" />
+                    </Grid>
+                    <Button Content="Clean up now" Command="{Binding CleanUpNowCommand}" HorizontalAlignment="Left" />
+                </StackPanel>
+            </Border>
+
+            <Border Classes="card">
+                <StackPanel Spacing="14">
+                    <TextBlock Text="Monitoring" Classes="h2" />
+                    <Grid Classes="setting" ColumnDefinitions="*,Auto">
+                        <StackPanel>
+                            <TextBlock Text="Global exclusions" />
+                            <TextBlock Classes="caption wrap"
+                                       Text="Names and patterns that are never recorded in any folder, such as .git, bin, obj, node_modules and temporary files. You can also add exclusions per folder." />
+                        </StackPanel>
+                        <Button Grid.Column="1" Content="Edit exclusions…" Command="{Binding EditGlobalExclusionsCommand}" VerticalAlignment="Center" />
+                    </Grid>
+                    <Grid Classes="setting" ColumnDefinitions="*,Auto">
+                        <StackPanel>
+                            <TextBlock Text="Combine rapid changes within" />
+                            <TextBlock Classes="caption wrap"
+                                       Text="Repeated modifications of the same file within this time become one record. Creations, deletions and renames are never combined." />
+                        </StackPanel>
+                        <ComboBox Grid.Column="1" ItemsSource="{Binding CoalescingOptions}" SelectedItem="{Binding SelectedCoalescing}"
+                                  AutomationProperties.Name="Combine rapid changes within" />
+                    </Grid>
+                    <Grid Classes="setting" ColumnDefinitions="*,Auto">
+                        <StackPanel>
+                            <TextBlock Text="Check for missed changes" />
+                            <TextBlock Classes="caption wrap"
+                                       Text="Windows can drop change notifications, so FolderTrail also compares each folder with its inventory regularly. Scans also run at startup, after waking from sleep, after errors, and when a folder becomes available again." />
+                        </StackPanel>
+                        <ComboBox Grid.Column="1" ItemsSource="{Binding PeriodicScanOptions}" SelectedItem="{Binding SelectedPeriodicScan}"
+                                  AutomationProperties.Name="Check for missed changes" />
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <Border Classes="card">
+                <StackPanel Spacing="14">
+                    <TextBlock Text="Window and startup" Classes="h2" />
+                    <Grid Classes="setting" ColumnDefinitions="*,Auto">
+                        <StackPanel>
+                            <TextBlock Text="Keep running when the window is closed" />
+                            <TextBlock Classes="caption wrap"
+                                       Text="Off (default): closing the window quits FolderTrail and monitoring stops; changes made meanwhile are found by a scan the next time it starts. On: closing only hides the window and monitoring continues from the notification area. Use Quit in the notification-area menu to exit." />
+                        </StackPanel>
+                        <ToggleSwitch Grid.Column="1" IsChecked="{Binding CloseToTray}" OnContent="On" OffContent="Off"
+                                      AutomationProperties.Name="Keep running when the window is closed" />
+                    </Grid>
+                    <Grid Classes="setting" ColumnDefinitions="*,Auto">
+                        <StackPanel>
+                            <TextBlock Text="Start with Windows" />
+                            <TextBlock Classes="caption wrap"
+                                       Text="Adds FolderTrail to your own startup list, so no administrator rights are needed. It starts in the background. Turning this off removes the entry." />
+                            <TextBlock Classes="caption wrap" IsVisible="{Binding !StartWithWindowsSupported}"
+                                       Text="Not available on this system." />
+                        </StackPanel>
+                        <ToggleSwitch Grid.Column="1" IsChecked="{Binding StartWithWindows}" OnContent="On" OffContent="Off"
+                                      IsEnabled="{Binding StartWithWindowsSupported}" AutomationProperties.Name="Start with Windows" />
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <Border Classes="card">
+                <StackPanel Spacing="14">
+                    <TextBlock Text="Notifications" Classes="h2" />
+                    <Grid Classes="setting" ColumnDefinitions="*,Auto">
+                        <StackPanel>
+                            <TextBlock Text="Alert me when a folder can't be monitored" />
+                            <TextBlock Classes="caption wrap"
+                                       Text="For example when a drive is disconnected, a folder goes missing, or permission is denied. FolderTrail never notifies you about individual file changes." />
+                        </StackPanel>
+                        <ToggleSwitch Grid.Column="1" IsChecked="{Binding NotifyOnProblems}" OnContent="On" OffContent="Off"
+                                      AutomationProperties.Name="Alert me when a folder can't be monitored" />
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <Border Classes="card">
+                <StackPanel Spacing="12">
+                    <TextBlock Text="Data and privacy" Classes="h2" />
+                    <TextBlock Classes="secondary wrap"
+                               Text="FolderTrail keeps a journal of names, paths, sizes and times. It never reads or stores file contents, so it can't restore files. Everything stays on this computer: FolderTrail sends nothing over the network and has no accounts, analytics, ads or automatic updates. Diagnostic logs don't contain file or folder paths unless you choose to include them in an export." />
+                    <StackPanel Spacing="2">
+                        <TextBlock Text="Stored in" Classes="label" />
+                        <SelectableTextBlock Text="{Binding DataDirectory}" TextWrapping="Wrap" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Button Content="Open data folder" Command="{Binding OpenDataFolderCommand}" />
+                        <Button Classes="danger" Content="Delete all data…" Command="{Binding DeleteAllDataCommand}"
+                                IsEnabled="{Binding !IsDeleting}" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption">
+                <Run Text="FolderTrail version" />
+                <Run Text="{Binding AppVersion}" />
+            </TextBlock>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
