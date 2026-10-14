@@ -20,9 +20,10 @@ public sealed class WindowsFactAttribute : FactAttribute
 
 public sealed class TempDirectory : IDisposable
 {
-    public TempDirectory()
+    /// <param name="parent">Where to create the directory; defaults to the user's temp folder.</param>
+    public TempDirectory(string? parent = null)
     {
-        var raw = System.IO.Path.Combine(System.IO.Path.GetTempPath(), "foldertrail-tests", Guid.NewGuid().ToString("N")[..12]);
+        var raw = System.IO.Path.Combine(parent ?? System.IO.Path.GetTempPath(), "foldertrail-tests", Guid.NewGuid().ToString("N")[..12]);
         Directory.CreateDirectory(raw);
         Path = OperatingSystem.IsWindows() ? WindowsPath.Canonicalize(raw) : raw;
     }

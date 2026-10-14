@@ -284,6 +284,83 @@ public sealed class MainWindowTests
             Assert.Skip("Set FOLDERTRAIL_DEMO_DIR to generate README screenshots.");
         }
 
+        await using var ui = await UiHarness.StartAsync();
+        var (projects, folder) = await SeedDemoActivityAsync(ui, demoRoot);
+        ui.Shell.Timeline.SelectedRow = ui.Shell.Timeline.Rows.OfType<EventRow>().First(r => r.Name == "Proposal v2.docx");
+        await UiWait.UntilAsync(() => ui.Shell.Timeline.Details.ItemExists == true, "details are loaded");
+
+        var output = Path.Combine(demoRoot, "screenshots");
+        foreach (var theme in new[] { ThemeVariant.Light, ThemeVariant.Dark })
+        {
+            Application.Current!.RequestedThemeVariant = theme;
+            await CaptureAsync(ui, "foldertrail", theme, output);
+        }
+
+        await folder.PauseCommand.ExecuteAsync(null);
+    }
+
+    /// <summary>
+    /// Generates the Microsoft Store listing screenshots (1920x1080, light and dark) from real activity.
+    /// Runs only when FOLDERTRAIL_DEMO_DIR is set; images land in its store-screenshots folder.
+    /// </summary>
+    [AvaloniaFact]
+    public async Task Store_screenshots_from_real_activity()
+    {
+        var demoRoot = Environment.GetEnvironmentVariable("FOLDERTRAIL_DEMO_DIR");
+        if (string.IsNullOrEmpty(demoRoot))
+        {
+            Assert.Skip("Set FOLDERTRAIL_DEMO_DIR to generate Store screenshots.");
+        }
+
+        // The images are published, so everything they show lives under the neutral demo root, not a user profile.
+        var clientFiles = Path.Combine(demoRoot, "Client files");
+        Directory.CreateDirectory(clientFiles);
+        File.WriteAllText(Path.Combine(clientFiles, "brief.pdf"), new string('b', 4_000));
+
+        await using var ui = await UiHarness.StartAsync(Path.Combine(demoRoot, "AppData"));
+        ui.Window.Width = 1920;
+        ui.Window.Height = 1080;
+        var (_, folder) = await SeedDemoActivityAsync(ui, demoRoot);
+
+        var output = Path.Combine(demoRoot, "store-screenshots");
+        foreach (var theme in new[] { ThemeVariant.Light, ThemeVariant.Dark })
+        {
+            Application.Current!.RequestedThemeVariant = theme;
+            ui.Shell.Timeline.SelectedRow = ui.Shell.Timeline.Rows.OfType<EventRow>().First(r => r.Name == "Proposal v2.docx");
+            await UiWait.UntilAsync(() => ui.Shell.Timeline.Details.ItemExists == true, "details are loaded");
+            await CaptureAsync(ui, "1-timeline", theme, output);
+
+            ui.Shell.Timeline.SearchText = "Proposal";
+            await UiWait.UntilAsync(() => !ui.Shell.Timeline.IsLoading && ui.Shell.Timeline.Rows.OfType<EventRow>().All(r => r.Name.Contains("Proposal", StringComparison.Ordinal)), "the search narrows the timeline");
+            await CaptureAsync(ui, "2-search", theme, output);
+            ui.Shell.Timeline.SearchText = string.Empty;
+            await UiWait.UntilAsync(() => !ui.Shell.Timeline.IsLoading && ui.Shell.Timeline.Rows.OfType<EventRow>().Any(r => r.Name == "old-logo.png"), "the full timeline returns");
+
+            ui.Picker.NextPath = clientFiles;
+            var adding = ui.Shell.Folders.AddFolderInteractiveAsync();
+            await UiWait.UntilAsync(() => ui.Shell.Dialogs.Current is AddFolderDialogViewModel { Check: not null }, "the add-folder dialog has checked the folder");
+            await CaptureAsync(ui, "3-add-folder", theme, output);
+            ui.Shell.Dialogs.CancelCurrentCommand.Execute(null);
+            await adding;
+
+            var editing = folder.EditExclusionsCommand.ExecuteAsync(null);
+            await UiWait.UntilAsync(() => ui.Shell.Dialogs.IsOpen, "the exclusions dialog opens");
+            await UiWait.SettleAsync(400);
+            await CaptureAsync(ui, "4-exclusions", theme, output);
+            ui.Shell.Dialogs.CancelCurrentCommand.Execute(null);
+            await editing;
+
+            await ui.Shell.ShowDiagnosticsCommand.ExecuteAsync(null);
+            await CaptureAsync(ui, "5-diagnostics", theme, output);
+            ui.Shell.ShowActivityCommand.Execute(null);
+        }
+
+        await folder.PauseCommand.ExecuteAsync(null);
+    }
+
+    /// <summary>Writes a realistic demo folder, watches it and produces a mix of live and scan-found changes.</summary>
+    private static async Task<(string Projects, WatchedFolderItemViewModel Folder)> SeedDemoActivityAsync(UiHarness ui, string demoRoot)
+    {
         var projects = Path.Combine(demoRoot, "Projects");
         if (Directory.Exists(projects))
         {
@@ -303,7 +380,6 @@ public sealed class MainWindowTests
         Write(@"Design\old-logo.png", new string('p', 9_800));
         Write(@"Design\palette.ase", new string('c', 1_200));
 
-        await using var ui = await UiHarness.StartAsync();
         await ui.Shell.Onboarding.SkipCommand.ExecuteAsync(null);
         await ui.Get<WatchedFolderService>().AddAsync(projects, true, false, TestContext.Current.CancellationToken);
         await UiWait.UntilAsync(() => ui.Shell.Folders.Folders.SingleOrDefault()?.State == RootState.Watching, "the demo folder is watched");
@@ -329,17 +405,7 @@ public sealed class MainWindowTests
         await Step(() => Write(@"Invoices\INV-2026-014.pdf", new string('i', 31_000)), r => r.Name == "INV-2026-014.pdf", "the invoice is created");
         await Step(() => File.Move(Path.Combine(projects, "Proposal draft.docx"), Path.Combine(projects, "Proposal v2.docx")), r => r.Name == "Proposal v2.docx" && r.IsRenamed, "the proposal is renamed");
 
-        ui.Shell.Timeline.SelectedRow = ui.Shell.Timeline.Rows.OfType<EventRow>().First(r => r.Name == "Proposal v2.docx");
-        await UiWait.UntilAsync(() => ui.Shell.Timeline.Details.ItemExists == true, "details are loaded");
-
-        var output = Path.Combine(demoRoot, "screenshots");
-        foreach (var theme in new[] { ThemeVariant.Light, ThemeVariant.Dark })
-        {
-            Application.Current!.RequestedThemeVariant = theme;
-            await CaptureAsync(ui, "foldertrail", theme, output);
-        }
-
-        await folder.PauseCommand.ExecuteAsync(null);
+        return (projects, folder);
     }
 
     private static EventRow? FindRow(UiHarness ui, string name, ActivityType type) =>

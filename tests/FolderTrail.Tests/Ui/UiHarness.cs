@@ -31,11 +31,12 @@ public static class TestAppBuilder
 /// <summary>Runs the real composition root and main window headlessly, with fakes only at the OS edges.</summary>
 public sealed class UiHarness : IAsyncDisposable
 {
-    private UiHarness()
+    private UiHarness(string? dataParent)
     {
+        Data = new TempDirectory(dataParent);
     }
 
-    public TempDirectory Data { get; } = new();
+    public TempDirectory Data { get; }
 
     public FakeFolderPicker Picker { get; } = new();
 
@@ -56,9 +57,10 @@ public sealed class UiHarness : IAsyncDisposable
     public T Get<T>()
         where T : notnull => Host.Services.GetRequiredService<T>();
 
-    public static async Task<UiHarness> StartAsync()
+    /// <param name="dataParent">Where to keep the app data; defaults to the temp folder. Screenshots pass a neutral path.</param>
+    public static async Task<UiHarness> StartAsync(string? dataParent = null)
     {
-        var harness = new UiHarness();
+        var harness = new UiHarness(dataParent);
         var location = new AppDataLocation(harness.Data.Path);
         harness.Host = AppHost.Build(location, services =>
         {
