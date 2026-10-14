@@ -114,16 +114,26 @@ The app has no account, no in-app purchases, no ads and no network features.
 
 ## Screenshots (min 1; recommended 4 to 5, at 1920×1080)
 
-| # | Screen | Caption |
-|---|---|---|
-| 1 | Timeline with a day's activity | See what changed, and when |
-| 2 | Filters and search in use | Search and filter the whole history |
-| 3 | Add-folder dialog | Watch only the folders you choose |
-| 4 | Exclusions dialog | Skip the noise: .git, bin, node_modules and more |
-| 5 | Diagnostics | Honest about what was captured |
+Ready in `docs/store/screenshots/`, one light and one dark version of each. Upload the set you prefer (or both).
 
-Capture them in both light and dark if you want variants. `docs/screenshots/` already holds light and dark
-timeline shots from the test suite; the others still need to be captured.
+| File | Screen | Caption |
+|---|---|---|
+| `1-timeline-*.png` | Timeline with a day's activity and the details pane | See what changed, and when |
+| `2-search-*.png` | Search narrowing the history | Search the whole history |
+| `3-add-folder-*.png` | Watch-a-folder dialog | Watch only the folders you choose |
+| `4-exclusions-*.png` | Per-folder exclusions | Skip the noise: .git, bin, node_modules and more |
+| `5-diagnostics-*.png` | Diagnostics | Honest about what was captured |
+
+They are rendered from the real app by a test, from real file activity, and show only a neutral demo folder (no
+user name or personal paths). To regenerate after a UI change, use a neutral folder so no profile path leaks in:
+
+```powershell
+$env:FOLDERTRAIL_DEMO_DIR = 'C:\FolderTrailDemo'
+dotnet test tests/FolderTrail.Tests -c Release --filter "FullyQualifiedName~Store_screenshots"
+# images appear in C:\FolderTrailDemo\store-screenshots; copy them into docs/store/screenshots
+```
+
+Look at each image before uploading; the Store shows them publicly.
 
 ## Store logos
 Generated from `src/FolderTrail.App/Assets/foldertrail-256.png` by `scripts/package-msix.ps1`. For the Store
