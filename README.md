@@ -101,6 +101,18 @@ signed** — sign `FolderTrail.exe` yourself if you distribute it. Before shippi
 Windows machine: first launch, folder picker, live events, rename, pause/resume, a missing drive,
 close-to-tray, quit, restart, and CSV export.
 
+### Microsoft Store (MSIX) package
+
+```powershell
+./scripts/package-msix.ps1 -IdentityName <Partner Center name> -Publisher '<CN=...>' -PublisherDisplayName '<name>'
+```
+
+Builds `artifacts/msix/FolderTrail_<version>_x64.msix` from `packaging/AppxManifest.xml` (unsigned — the Store signs
+it). Inside the package, **Start with Windows** uses a manifest startup task instead of the registry Run key
+(`PackagedStartupRegistration`), and data lives in the package's private `%LOCALAPPDATA%` and is removed on uninstall.
+For a local test install add `-SignForSideload`, or enable Windows *Developer Mode* and register the unsigned layout:
+`Add-AppxPackage -Register artifacts/msix/layout/AppxManifest.xml`.
+
 ## License
 
 [MIT](LICENSE). Icons adapted from [Material Design Icons](https://pictogrammers.com/library/mdi/) (Apache 2.0).

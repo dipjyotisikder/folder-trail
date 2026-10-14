@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  MSIX manifest template. scripts/package-msix.ps1 replaces the {{tokens}}.
+  For Microsoft Store uploads, Name / Publisher / PublisherDisplayName must be the values shown under
+  Partner Center -> Product identity; the Store re-signs the package with its own certificate.
+-->
+<Package
+  xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+  xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+  xmlns:uap5="http://schemas.microsoft.com/appx/manifest/uap/windows10/5"
+  xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
+  IgnorableNamespaces="uap uap5 rescap">
+
+  <Identity Name="{{IdentityName}}" Publisher="{{Publisher}}" Version="{{Version}}" ProcessorArchitecture="x64" />
+
+  <Properties>
+    <DisplayName>FolderTrail</DisplayName>
+    <PublisherDisplayName>{{PublisherDisplayName}}</PublisherDisplayName>
+    <Logo>Assets\StoreLogo.png</Logo>
+    <Description>A change journal for the folders you choose: what was created, modified, deleted or renamed, and when.</Description>
+  </Properties>
+
+  <Dependencies>
+    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.17763.0" MaxVersionTested="10.0.26100.0" />
+  </Dependencies>
+
+  <Resources>
+    <Resource Language="en-us" />
+  </Resources>
+
+  <Applications>
+    <Application Id="FolderTrail" Executable="FolderTrail.exe" EntryPoint="Windows.FullTrustApplication">
+      <uap:VisualElements
+        DisplayName="FolderTrail"
+        Description="A change journal for the folders you choose."
+        BackgroundColor="transparent"
+        Square150x150Logo="Assets\Square150x150Logo.png"
+        Square44x44Logo="Assets\Square44x44Logo.png">
+        <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png" />
+      </uap:VisualElements>
+
+      <Extensions>
+        <!-- "Start with Windows". A packaged app can't use the registry Run key; the toggle in Settings drives this task. -->
+        <uap5:Extension Category="windows.startupTask" Executable="FolderTrail.exe" EntryPoint="Windows.FullTrustApplication">
+          <uap5:StartupTask TaskId="FolderTrailStartup" Enabled="false" DisplayName="FolderTrail" />
+        </uap5:Extension>
+      </Extensions>
+    </Application>
+  </Applications>
+
+  <Capabilities>
+    <!-- Win32 app (.NET desktop) that watches folders the user picks, using the regular file-change APIs. -->
+    <rescap:Capability Name="runFullTrust" />
+  </Capabilities>
+</Package>
