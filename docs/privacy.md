@@ -53,7 +53,8 @@ FolderTrail shares nothing on its own. You can choose to:
 ## Deleting your data
 
 - **Settings → Delete all data** removes the database, the settings and the diagnostic log.
-- **Remove a folder** from the watched list to delete the history recorded for it.
+- **Remove a folder** from the watched list and choose "stop watching and delete this folder's history" to
+  delete what was recorded for it. (If you choose to keep it, it is deleted when it passes the retention period.)
 - Uninstalling the Microsoft Store version also removes its stored data.
 
 ## Start with Windows
