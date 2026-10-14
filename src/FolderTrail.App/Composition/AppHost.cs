@@ -61,9 +61,10 @@ public static class AppHost
         services.AddSingleton<IFileSystemScanner, FileSystemScanner>();
         services.AddSingleton<IDirectoryWatcherFactory, FileSystemWatcherFactory>();
         services.AddSingleton<IStartupRegistration>(_ =>
-            OperatingSystem.IsWindows() && Environment.ProcessPath is { } executable
-                ? new WindowsStartupRegistration(executable)
-                : new UnsupportedStartupRegistration());
+            !OperatingSystem.IsWindows() ? new UnsupportedStartupRegistration()
+            : PackageIdentity.IsPackaged ? new PackagedStartupRegistration()
+            : Environment.ProcessPath is { } executable ? new WindowsStartupRegistration(executable)
+            : new UnsupportedStartupRegistration());
 
         services.AddSingleton<SettingsService>();
         services.AddSingleton<WatchedFolderService>();

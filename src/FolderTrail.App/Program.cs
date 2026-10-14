@@ -55,7 +55,8 @@ internal static class Program
             startupError = exception;
         }
 
-        var startMinimized = args.Contains(StartupArguments.Minimized, StringComparer.OrdinalIgnoreCase);
+        var startMinimized = args.Contains(StartupArguments.Minimized, StringComparer.OrdinalIgnoreCase)
+            || (PackageIdentity.IsPackaged && PackagedStartupRegistration.WasLaunchedByStartupTask());
         BuildAvaloniaApp(host.Services, new StartupOptions(startMinimized, instance, startupError))
             .StartWithClassicDesktopLifetime(args, Avalonia.Controls.ShutdownMode.OnExplicitShutdown);
 
