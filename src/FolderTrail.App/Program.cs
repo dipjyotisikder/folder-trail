@@ -31,7 +31,7 @@ internal static class Program
             return 0;
         }
 
-        var location = AppDataLocation.ForCurrentUser();
+        var location = AppDataLocator.Resolve();
         using var host = AppHost.Build(location);
         var log = host.Services.GetRequiredService<DiagnosticLog>();
         AppDomain.CurrentDomain.UnhandledException += (_, e) =>

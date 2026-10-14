@@ -130,6 +130,8 @@
                         <TextBlock Text="Stored in" Classes="label" />
                         <SelectableTextBlock Text="{Binding DataDirectory}" TextWrapping="Wrap" />
                     </StackPanel>
+                    <TextBlock Classes="caption wrap" IsVisible="{Binding RemovedOnUninstall}"
+                               Text="Uninstalling FolderTrail also removes this data. Export the timeline to CSV first if you want to keep a copy." />
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <Button Content="Open data folder" Command="{Binding OpenDataFolderCommand}" />
                         <Button Classes="danger" Content="Delete all data…" Command="{Binding DeleteAllDataCommand}"

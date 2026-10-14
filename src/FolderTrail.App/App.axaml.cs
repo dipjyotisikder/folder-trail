@@ -106,7 +106,7 @@ public partial class App : Application
 
     private static void ShowStartupError(IClassicDesktopStyleApplicationLifetime desktop, Exception error)
     {
-        var window = new StartupErrorWindow(error.Message, AppDataLocation.ForCurrentUser().RootDirectory);
+        var window = new StartupErrorWindow(error.Message, AppDataLocator.Resolve().RootDirectory);
         window.Closed += (_, _) => desktop.Shutdown();
         window.Show();
     }

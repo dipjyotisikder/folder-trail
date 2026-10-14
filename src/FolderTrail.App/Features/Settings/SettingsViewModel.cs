@@ -4,6 +4,7 @@ using FolderTrail.App.Features.WatchedFolders;
 using FolderTrail.App.Shared;
 using FolderTrail.App.Shared.Dialogs;
 using FolderTrail.App.Shared.Platform;
+using FolderTrail.App.Shell;
 using FolderTrail.Core.Features.DataReset;
 using FolderTrail.Core.Features.Diagnostics;
 using FolderTrail.Core.Features.Retention;
@@ -96,6 +97,9 @@ public sealed partial class SettingsViewModel : ViewModelBase
     public string AppVersion => DiagnosticsService.AppVersion;
 
     public bool StartWithWindowsSupported => _settings.StartWithWindowsSupported;
+
+    /// <summary>The Microsoft Store build removes its data on uninstall, so say so next to the data location.</summary>
+    public bool RemovedOnUninstall => PackageIdentity.IsPackaged;
 
     [ObservableProperty]
     public partial Option<ThemePreference>? SelectedTheme { get; set; }
