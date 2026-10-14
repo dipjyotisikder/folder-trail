@@ -9,12 +9,20 @@
     and zips each into artifacts/release with a SHA-256 checksum file.
     The executables are not code signed.
 
+    With -Store it also packs the Microsoft Store MSIX from the folder build (see package-msix.ps1); pass the
+    identity values from Partner Center to produce an uploadable package.
+
 .EXAMPLE
     ./scripts/publish.ps1
     ./scripts/publish.ps1 -SkipTests
+    ./scripts/publish.ps1 -Store -IdentityName 12345Publisher.FolderTrail -Publisher 'CN=ABCD-1234' -PublisherDisplayName 'Your Name'
 #>
 param(
-    [switch]$SkipTests
+    [switch]$SkipTests,
+    [switch]$Store,
+    [string]$IdentityName = 'FolderTrail.Dev',
+    [string]$Publisher = 'CN=FolderTrail Dev',
+    [string]$PublisherDisplayName = 'FolderTrail'
 )
 
 $ErrorActionPreference = 'Stop'
@@ -61,3 +69,8 @@ foreach ($variant in 'win-x64', 'win-x64-single') {
 $checksums | Set-Content -Encoding ascii (Join-Path $release 'SHA256SUMS.txt')
 
 Write-Host "Release files are in $release (not code signed)."
+
+if ($Store) {
+    # Reuses the folder build published above, so the zip and the Store package contain the same binaries.
+    & (Join-Path $PSScriptRoot 'package-msix.ps1') -SkipPublish -IdentityName $IdentityName -Publisher $Publisher -PublisherDisplayName $PublisherDisplayName
+}

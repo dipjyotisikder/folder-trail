@@ -108,8 +108,9 @@ close-to-tray, quit, restart, and CSV export.
 ```
 
 Builds `artifacts/msix/FolderTrail_<version>_x64.msix` from `packaging/AppxManifest.xml` (unsigned — the Store signs
-it). Inside the package, **Start with Windows** uses a manifest startup task instead of the registry Run key
-(`PackagedStartupRegistration`), and data lives in the package's private `%LOCALAPPDATA%` and is removed on uninstall.
+it). `./scripts/publish.ps1 -Store` (with the same identity parameters) builds the
+zips and the MSIX from one publish. Inside the package, **Start with Windows** uses a manifest startup task instead of the registry Run key
+(`PackagedStartupRegistration`), and data lives in the package's own local folder (shown in Settings) and is removed on uninstall.
 For a local test install add `-SignForSideload`, or enable Windows *Developer Mode* and register the unsigned layout:
 `Add-AppxPackage -Register artifacts/msix/layout/AppxManifest.xml`.
 
