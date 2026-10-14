@@ -126,7 +126,7 @@ Invoke-Step 'Indexing logo resources (resources.pri)' {
 }
 
 $msix = Join-Path $out "FolderTrail_${packageVersion}_x64.msix"
-Invoke-Step 'Packing MSIX' { & $makeappx pack /d $layout /p $msix /o /nv | Select-String -Pattern 'error|succeeded' }
+Invoke-Step 'Packing MSIX' { & $makeappx pack /d $layout /p $msix /o | Select-String -Pattern 'error|succeeded' }
 
 if ($SignForSideload) {
     $signtool = Find-SdkTool 'signtool.exe'

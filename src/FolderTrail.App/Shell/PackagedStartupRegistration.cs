@@ -1,4 +1,4 @@
-using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
 using FolderTrail.Core.Features.Settings;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
@@ -7,10 +7,9 @@ namespace FolderTrail.App.Shell;
 
 /// <summary>
 /// "Start with Windows" for the MSIX build. Registry Run-key writes are virtualized inside a package and never
-/// run at sign-in, so the package declares a startup task (see Package/AppxManifest.xml) and this toggles it.
+/// run at sign-in, so the package declares a startup task (see packaging/AppxManifest.xml) and this toggles it.
 /// The user can also switch it off in Settings → Apps → Startup; the app then can't turn it back on.
 /// </summary>
-
 public sealed class PackagedStartupRegistration : IStartupRegistration
 {
     public const string TaskId = "FolderTrailStartup";
@@ -22,15 +21,27 @@ public sealed class PackagedStartupRegistration : IStartupRegistration
         {
             return AppInstance.GetActivatedEventArgs()?.Kind == ActivationKind.StartupTask;
         }
-        catch (Exception exception) when (exception is System.Runtime.InteropServices.COMException or InvalidOperationException)
+        catch (Exception exception) when (exception is COMException or InvalidOperationException or ArgumentException)
         {
+            // Best effort: not knowing how we were launched only means the window opens normally.
             return false;
         }
     }
 
     public bool IsSupported => true;
 
-    public bool IsEnabled() => Run(async () => IsOn((await StartupTask.GetAsync(TaskId)).State));
+    /// <summary>Reading the state must never stop the app from starting, so a failure reads as "off".</summary>
+    public bool IsEnabled()
+    {
+        try
+        {
+            return Run(async () => IsOn((await StartupTask.GetAsync(TaskId)).State));
+        }
+        catch (PlatformNotSupportedException)
+        {
+            return false;
+        }
+    }
 
     public void SetEnabled(bool enabled) => Run(async () =>
     {
@@ -62,7 +73,7 @@ public sealed class PackagedStartupRegistration : IStartupRegistration
         {
             return Task.Run(operation).GetAwaiter().GetResult();
         }
-        catch (Exception exception) when (exception is System.Runtime.InteropServices.COMException or InvalidOperationException)
+        catch (Exception exception) when (exception is COMException or InvalidOperationException or ArgumentException)
         {
             throw new PlatformNotSupportedException("Windows couldn't change the startup task: " + exception.Message, exception);
         }
